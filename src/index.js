@@ -1,10 +1,14 @@
 import React from 'react';
+import firebase from 'firebase';
 import ReactDOM from 'react-dom';
 import './styles/index.scss';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
 
 import 'bootstrap/dist/css/bootstrap.min.css';
+import firebaseConfig from './helpers/apiKeys';
+
+firebase.initializeApp(firebaseConfig);
 
 ReactDOM.render(
   <React.Fragment>
