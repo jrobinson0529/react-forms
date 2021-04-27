@@ -22,10 +22,11 @@ function App() {
       {students.map((studentInfo) => (
         <StudentCard
           key={studentInfo.firebaseKey}
-          firebaseKey={studentInfo.firebaseKey}
-          name={studentInfo.name}
-          grade={Number(studentInfo.grade)}
-          teacher={studentInfo.teacher}
+          {...studentInfo}
+          // firebaseKey={studentInfo.firebaseKey}
+          // name={studentInfo.name}
+          // grade={Number(studentInfo.grade)}
+          // teacher={studentInfo.teacher}
           setStudents={setStudents}
           />
       ))}

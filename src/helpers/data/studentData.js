@@ -22,5 +22,15 @@ const addStudent = (studentObject) => new Promise((resolve, reject) => {
     })
     .catch((error) => reject(error));
 });
+const updateStudent = (firebaseKey, studentObject) => new Promise((resolve, reject) => {
+  axios.patch(`${dbUrl}/students/${firebaseKey}.json`, studentObject)
+    .then(() => getStudents().then(resolve))
+    .catch((error) => reject(error));
+});
 
-export { getStudents, addStudent, deleteStudent };
+export {
+  getStudents,
+  addStudent,
+  deleteStudent,
+  updateStudent
+};
