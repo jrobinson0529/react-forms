@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import './App.scss';
 import StudentForm from '../StudentForm';
-import { addStudent, getStudents } from '../helpers/data/studentData';
+import { getStudents } from '../helpers/data/studentData';
 import StudentCard from '../components/StudentCard';
 
 function App() {
@@ -11,23 +11,25 @@ function App() {
     getStudents().then((response) => setStudents(response));
   }, []);
 
-  const handleSubmit = (e, student) => {
-    e.preventDefault();
-    addStudent(student).then(() => getStudents().then((response) => setStudents(response)));
-  };
   return (
     <div className='App'>
-      <StudentForm formTitle='Add Student' handleSubmit={handleSubmit} />
+      <StudentForm
+        formTitle='Add Student'
+        setStudents={setStudents}
+        />
       <hr />
+      <div className='student-card-container d-flex flex-wrap'>
       {students.map((studentInfo) => (
         <StudentCard
           key={studentInfo.firebaseKey}
+          firebaseKey={studentInfo.firebaseKey}
           name={studentInfo.name}
           grade={Number(studentInfo.grade)}
           teacher={studentInfo.teacher}
-          handleClick={() => console.warn(`${studentInfo.name}'s teacher is ${studentInfo.teacher}`)}
+          setStudents={setStudents}
           />
       ))}
+      </div>
     </div>
   );
 }

@@ -1,12 +1,17 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
+import { addStudent } from './helpers/data/studentData';
 
-const StudentForm = ({ formTitle, handleSubmit }) => {
+const StudentForm = ({ formTitle, setStudents }) => {
   const [student, setStudent] = useState({
     name: '',
     teacher: '',
     grade: 0,
   });
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    addStudent(student).then((response) => setStudents(response));
+  };
   const handleInputChange = (e) => {
     setStudent((prevState) => ({
       ...prevState,
@@ -19,7 +24,7 @@ const StudentForm = ({ formTitle, handleSubmit }) => {
         <form
           id="addStudentForm"
           autoComplete="off"
-          onSubmit={(e) => handleSubmit(e, student)}
+          onSubmit={handleSubmit}
           >
           <h2>{formTitle}</h2>
           <label>Name: </label>
@@ -55,7 +60,7 @@ const StudentForm = ({ formTitle, handleSubmit }) => {
 
 StudentForm.propTypes = {
   formTitle: PropTypes.string.isRequired,
-  handleSubmit: PropTypes.func.isRequired
+  setStudents: PropTypes.func.isRequired,
 };
 
 export default StudentForm;
