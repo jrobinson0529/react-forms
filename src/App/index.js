@@ -1,37 +1,40 @@
 import React, { useEffect, useState } from 'react';
-import './App.scss';
-import StudentForm from '../StudentForm';
+import { BrowserRouter as Router } from 'react-router-dom';
+import firebase from 'firebase/app';
+import 'firebase/auth';
+import NavBar from '../components/NavBar';
 import { getStudents } from '../helpers/data/studentData';
-import StudentCard from '../components/StudentCard';
+import Routes from '../helpers/Routes';
 
 function App() {
   const [students, setStudents] = useState([]);
+  const [user, setUser] = useState(null);
 
   useEffect(() => {
     getStudents().then((response) => setStudents(response));
   }, []);
-
+  useEffect(() => {
+    firebase.auth().onAuthStateChanged((authed) => {
+      if (authed) {
+        const userInfoObject = {
+          fullName: authed.displayName,
+          profileImage: authed.photoURL,
+          uid: authed.uid,
+          username: authed.email.split('@gmail.com')[0]
+        };
+        setUser(userInfoObject);
+      } else if (user || user === null) {
+        setUser(false);
+      }
+    });
+  }, []);
   return (
-    <div className='App'>
-      <StudentForm
-        formTitle='Add Student'
-        setStudents={setStudents}
-        />
-      <hr />
-      <div className='student-card-container d-flex flex-wrap'>
-      {students.map((studentInfo) => (
-        <StudentCard
-          key={studentInfo.firebaseKey}
-          {...studentInfo}
-          // firebaseKey={studentInfo.firebaseKey}
-          // name={studentInfo.name}
-          // grade={Number(studentInfo.grade)}
-          // teacher={studentInfo.teacher}
-          setStudents={setStudents}
-          />
-      ))}
-      </div>
-    </div>
+    <>
+    <Router>
+      <NavBar user={user}/>
+      <Routes students={students} setStudents={setStudents} user={user}/>
+    </Router>
+    </>
   );
 }
 
